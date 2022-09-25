@@ -7,7 +7,7 @@ export class Game extends React.Component {
         super(props);
         this.state = {
             history: [{
-                squares: Array(9).fill(null),
+                squares: Array(Game.lastStep).fill(null),
                 xIsNext: true,
                 winner: null,
             }],
@@ -15,6 +15,9 @@ export class Game extends React.Component {
             sortOrderAsc: true,
         };
     }
+
+    static fieldSize = 4;
+    static lastStep = this.fieldSize * this.fieldSize;
 
     nextPlayer = () => this.historyAtStep().xIsNext ? 'X' : 'O';
 
@@ -41,14 +44,14 @@ export class Game extends React.Component {
         });
     }
 
-    lastStep = 9;
+
     statusText = () => this.historyAtStep().winner
         ? `Winner ${this.historyAtStep().winner.mark}`
-        : this.state.showStepNumber === this.lastStep
+        : this.state.showStepNumber === Game.lastStep
             ? "Draw!"
             : `Next player: ${this.nextPlayer()}`;
 
-    indexToRowCol = (index) => `(${Math.floor(index / 3)};${index % 3})`;
+    indexToRowCol = (index) => `(${Math.floor(index / Game.fieldSize)};${index % Game.fieldSize})`;
 
     sort = (e) => {
         const value = e.target.value === "asc";
@@ -77,7 +80,7 @@ export class Game extends React.Component {
         return (
             <div className="game">
                 <div className="game-board">
-                    <Board onClick={this.handleClick} squares={this.historyAtStep().squares} winner={this.historyAtStep().winner}/>
+                    <Board onClick={this.handleClick} squares={this.historyAtStep().squares} winner={this.historyAtStep().winner} fieldSize={Game.fieldSize}/>
                 </div>
                 <div className="game-info">
                     <div>{this.statusText()}</div>

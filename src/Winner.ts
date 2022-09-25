@@ -1,14 +1,3 @@
-const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-];
-
 export class Winner {
     constructor(
         readonly mark: string,
@@ -16,12 +5,44 @@ export class Winner {
     ) {
     }
 
+    static fieldSize = 4;
+    static itemsInRow = 3;
+
+    static row(index: number): number {
+        return index / this.fieldSize;
+    }
+
+    static col(index: number): number {
+        return index % this.fieldSize;
+    }
+
+    static nextHorizontal(index: number|undefined) : number | undefined {
+        if (index === undefined) return index;
+        const col = this.col(index);
+        if (col<this.fieldSize) return index+1;
+        return undefined;
+    }
+
     static calculateWinner(squares: string[]) : Winner | undefined {
-        for (let i = 0; i < lines.length; i++) {
-            const [a, b, c] = lines[i];
-            if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-                return new Winner(squares[a], lines[i]);
+        for (let i=0; i<squares.length; i++) {
+            const startMark = squares[i];
+            if ((startMark?.length ?? 0) < 1) continue;
+
+            let horizontals = [i];
+            let nextHorizontalIndex : number | undefined = i;
+            for (let j=0; j<this.itemsInRow; j++) {
+                nextHorizontalIndex = this.nextHorizontal(nextHorizontalIndex);
+                if (nextHorizontalIndex) {
+                    const nextHorizontalMark = squares[nextHorizontalIndex];
+                    if (startMark === nextHorizontalMark){
+                        horizontals.push(nextHorizontalIndex);
+                    }
+                    else {
+                        break;
+                    }
+                }
             }
+            if (horizontals.length == this.itemsInRow) return  new Winner(startMark,horizontals);
         }
         return undefined;
     }
