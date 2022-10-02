@@ -19,7 +19,7 @@ export class Winner {
     static nextHorizontal(index: number|undefined) : number | undefined {
         if (index === undefined) return index;
         const col = this.col(index);
-        if (col<this.fieldSize) return index+1;
+        if (col<this.fieldSize-1) return index+1;
         return undefined;
     }
 

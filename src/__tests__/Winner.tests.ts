@@ -46,4 +46,16 @@ describe('Winner', () => {
         const winner = Winner.calculateWinner(gameField);
         expect(winner).toBeFalsy();
     });
+
+    it('should not detect horizontal winner on separate rows', () => {
+        const gameField =
+            [
+                '', '', 'X', 'X',
+                'X', '', 'O', '',
+                '', 'O', '', '',
+                '', '', '', ''
+            ];
+        const winner = Winner.calculateWinner(gameField);
+        expect(winner).toBeFalsy();
+    });
 });

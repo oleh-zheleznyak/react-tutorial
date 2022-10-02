@@ -21,7 +21,7 @@ export function Board(props) {
                 let square = renderSquare(row * props.fieldSize + col);
                 columns.push(square);
             }
-            let div = <div className="board-row">{columns}</div>
+            let div = <div className="board-row" key={row}>{columns}</div>
             boardRows.push(div);
         }
         return boardRows;
@@ -30,4 +30,4 @@ export function Board(props) {
     const boardRows = buildBoardRows();
 
     return (<div>{boardRows}</div>);
-};
+}
